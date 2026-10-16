@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planner · Clydara SPF Lookup Planner</title>
+    <meta name="description" content="Plan an SPF record change and see the DNS lookup budget before you publish." />
+    <link rel="icon" type="image/png" href="/clydara-logo.png" />
+  </head>
+  <body class="tool">
+    <a class="skip" href="#budget">Skip to results</a>
+    <header class="top">
+      <a class="mark" href="/" aria-label="SPF Lookup Planner home">
+        <svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="1" width="28" height="28" rx="7" fill="#1c2128" stroke="#3a444f"/><g fill="#c8f169"><rect x="6" y="17" width="2.4" height="6" rx="1"/><rect x="9.6" y="15" width="2.4" height="8" rx="1"/><rect x="13.2" y="13" width="2.4" height="10" rx="1"/><rect x="16.8" y="11" width="2.4" height="12" rx="1"/></g><rect x="20.4" y="8" width="2.4" height="15" rx="1" fill="#ff7a66"/><path d="M5 7h20" stroke="#ff7a66" stroke-width="1.5" stroke-dasharray="2 2"/></svg>
+        <span>SPF Lookup Planner<small>planner</small></span>
+      </a>
+      <nav aria-label="Workspace">
+        <button class="btn ghost small" id="load-sample" type="button">Run the sample plan</button>
+        <a href="/#how">What counts as a lookup</a>
+        <a class="credit" href="https://www.clydralab.com/" rel="noopener"><img src="/clydara-logo.png" alt="" width="22" height="22" /><span>Built by Clydara</span></a>
+      </nav>
+    </header>
+
+    <main class="ws">
+      <section class="controls" aria-label="Record inputs">
+        <form class="block" id="lookup-form" novalidate>
+          <label class="lbl" for="domain">Domain</label>
+          <div class="row">
+            <input id="domain" name="domain" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="yourcompany.com" aria-describedby="domain-help domain-error" />
+            <button class="btn" type="submit" id="lookup-btn">Look up</button>
+          </div>
+          <p class="help" id="domain-help">Reads the live SPF record. A full email address works too.</p>
+          <p class="err" id="domain-error" role="alert"></p>
+          <div class="resolver">
+            <label for="resolver">Resolver</label>
+            <select id="resolver">
+              <option value="google">Google Public DNS (dns.google)</option>
+              <option value="cloudflare">Cloudflare (1.1.1.1)</option>
+            </select>
+          </div>
+        </form>
+
+        <div class="block">
+          <div class="lbl-row"><label class="lbl" for="current">Current record</label><span class="src" id="current-src">not loaded</span></div>
+          <textarea id="current" class="rec" rows="3" spellcheck="false" placeholder="Look up a domain, or paste the record that is live today." aria-describedby="current-src"></textarea>
+        </div>
+
+        <div class="block planned">
+          <div class="lbl-row"><label class="lbl" for="planned">Planned record</label><button class="link" type="button" id="reset-planned">Reset to current</button></div>
+          <textarea id="planned" class="rec" rows="4" spellcheck="false" placeholder="v=spf1 include:_spf.google.com ~all" aria-describedby="planned-error"></textarea>
+          <p class="err" id="planned-error" role="alert"></p>
+          <fieldset class="senders">
+            <legend>Add a sending service</legend>
+            <div class="sender-list" id="sender-list"></div>
+          </fieldset>
+          <form class="row add-inc" id="include-form" novalidate>
+            <label class="sr-only" for="include">Include domain</label>
+            <input id="include" type="text" autocomplete="off" spellcheck="false" placeholder="include domain, e.g. spf.example.net" aria-describedby="include-error" />
+            <button class="btn ghost small" type="submit">Add include</button>
+          </form>
+          <p class="err" id="include-error" role="alert"></p>
+          <div class="out">
+            <button class="btn small" type="button" id="copy-record" disabled>Copy planned record</button>
+            <button class="btn ghost small" type="button" id="copy-report" disabled>Copy Markdown report</button>
+          </div>
+          <p class="toast" id="toast" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="results" id="budget" tabindex="-1" aria-label="Lookup budget">
+        <div class="status" id="status" aria-live="polite"></div>
+        <div class="meters" id="meters"></div>
+        <div class="card" id="bar-card" hidden>
+          <h2>Where the planned lookups go</h2>
+          <div id="bar"></div>
+        </div>
+        <div class="card" id="findings-card" hidden>
+          <h2>Findings <span id="findings-scope">for the planned record</span></h2>
+          <div id="findings"></div>
+        </div>
+        <div class="card" id="tree-card" hidden>
+          <div class="tree-head">
+            <h2>Evaluation tree</h2>
+            <div class="tabs" role="tablist" aria-label="Which record">
+              <button role="tab" type="button" id="tab-planned" aria-selected="true" aria-controls="tree">Planned</button>
+              <button role="tab" type="button" id="tab-current" aria-selected="false" tabindex="-1" aria-controls="tree">Current</button>
+            </div>
+          </div>
+          <p class="tree-key"><span class="cum">#n</span> running total · <span class="cost">+1</span> costs a lookup · <span class="cost zero">0</span> free</p>
+          <div id="tree" role="tabpanel" aria-labelledby="tab-planned"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>Domain names go to the resolver you pick. Records and reports stay in this tab.</span>
+      <a class="credit" href="https://www.clydralab.com/" rel="noopener"><img src="/clydara-logo.png" alt="" width="22" height="22" /><span>Built by Clydara</span></a>
+    </footer>
+    <script type="module" src="/src/tool.ts"></script>
+  </body>
+</html>
