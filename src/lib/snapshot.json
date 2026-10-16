@@ -1,0 +1,83 @@
+{
+ "capturedAt": "2026-10-16",
+ "resolver": "dns.google",
+ "answers": {
+  "TXT _spf.google.com": {
+   "status": "ok",
+   "records": [
+    "v=spf1 ip4:74.125.0.0/16 ip4:209.85.128.0/17 ip6:2001:4860:4864::/56 ip6:2404:6800:4864::/56 ip6:2607:f8b0:4864::/56 ip6:2800:3f0:4864::/56 ip6:2a00:1450:4864::/56 ip6:2c0f:fb50:4864::/56 ~all"
+   ]
+  },
+  "TXT sendgrid.net": {
+   "status": "ok",
+   "records": [
+    "tdjhrpaflcikf52iqtn9rnggr9",
+    "google-site-verification=1UEf8ey-RibUjY6gnpqIZFjWNqMknmeyeHz1zTmj0DE",
+    "i52uk89q4nfe1mpgqv5qsmsj3j.",
+    "6ifgg010qg6mquqt5lodun8qds",
+    "cemmvnbghpsb500d7c19e35fgm",
+    "l8bqrl0r33q4joeb79q8uuj009",
+    "v=spf1 ip4:167.89.0.0/17 ip4:208.117.48.0/20 ip4:50.31.32.0/19 ip4:198.37.144.0/20 ip4:198.21.0.0/21 ip4:192.254.112.0/20 ip4:168.245.0.0/17 ip4:149.72.0.0/16 ip4:159.183.0.0/16 ip4:134.128.64.0/18 ip4:159.26.176.0/20 include:ab.sendgrid.net ~all",
+    "p8bnb2lp424dkl3c4io1aemiei",
+    "5m3r13nvilmq8tgf5foh6ki1uv",
+    "mailru-verification: 2e3995fa8a7d00e0",
+    "yahoo-verification-key=TrufSXS+dfythA5AIMbLUnkX38rjr1HR93gbqHUSY74=",
+    "utjqqjvmeadmlva41ectre9gd3"
+   ]
+  },
+  "TXT ab.sendgrid.net": {
+   "status": "ok",
+   "records": [
+    "v=spf1 ip4:223.165.113.0/24 ip4:223.165.115.0/24 ip4:223.165.118.0/23 ip4:223.165.120.0/23 ~all"
+   ]
+  },
+  "TXT mailgun.org": {
+   "status": "ok",
+   "records": [
+    "google-site-verification=FIGVOKZm6lQFDBJaiC2DdwvBy8TInunoGCt-1gnL4PA",
+    "yahoo-verification-key=6SqcA173NI/sqCJxeUdqWBdMhCYOvO3l8KcWWDpf0qY=",
+    "bm875fk62qjqg22ls9c0hzvp69fg6v45",
+    "_8nu1z7buo055obs89jw55hkjzooc4nm",
+    "_zowlnczhs3ly3yr8wkbffswsqqbijle",
+    "v=spf1 include:_spf.mailgun.org include:_spf.eu.mailgun.org -all",
+    "8f7088gv5932jxw9lwwd1b6ttx2pw2ds"
+   ]
+  },
+  "TXT _spf.mailgun.org": {
+   "status": "ok",
+   "records": [
+    "v=spf1 include:_spf1.mailgun.org include:_spf2.mailgun.org ~all"
+   ]
+  },
+  "TXT _spf1.mailgun.org": {
+   "status": "ok",
+   "records": [
+    "v=spf1 ip4:159.135.224.0/20 ip4:69.72.32.0/20 ip4:204.220.90.0/23 ip4:204.220.92.0/22 ~all"
+   ]
+  },
+  "TXT _spf2.mailgun.org": {
+   "status": "ok",
+   "records": [
+    "v=spf1 ip4:161.38.192.0/20 ip4:143.55.224.0/21 ip4:143.55.232.0/22 ip4:159.112.240.0/20 ip4:198.244.48.0/20 ip4:204.220.168.0/21 ip4:204.220.176.0/20 ~all"
+   ]
+  },
+  "TXT _spf.eu.mailgun.org": {
+   "status": "ok",
+   "records": [
+    "v=spf1 ip4:141.193.32.0/23 ip4:159.135.140.80/29 ip4:159.135.132.128/25 ip4:161.38.204.0/22 ip4:87.253.232.0/21 ip4:185.189.236.0/22 ip4:185.211.120.0/22 ip4:185.250.236.0/22 ip4:143.55.236.0/22 ip4:198.244.60.0/22 ip4:204.220.160.0/20 ~all"
+   ]
+  },
+  "TXT servers.mcsv.net": {
+   "status": "ok",
+   "records": [
+    "v=spf1 ip4:205.201.128.0/20 ip4:198.2.128.0/18 ip4:148.105.0.0/16 -all"
+   ]
+  },
+  "TXT _spf.salesforce.com": {
+   "status": "ok",
+   "records": [
+    "v=spf1 exists:%{i}._spf.mta.salesforce.com -all"
+   ]
+  }
+ }
+}
