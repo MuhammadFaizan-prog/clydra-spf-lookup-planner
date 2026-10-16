@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clydara SPF Lookup Planner: add a sender without breaking SPF</title>
+    <meta name="description" content="See how many of SPF's 10 DNS lookups your record uses, which include costs the most, and what a new sending service will add before you publish the change." />
+    <link rel="icon" type="image/png" href="/clydara-logo.png" />
+  </head>
+  <body class="landing">
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="top">
+      <a class="mark" href="/" aria-label="SPF Lookup Planner home">
+        <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="1" width="28" height="28" rx="7" fill="#1c2128" stroke="#3a444f"/><g fill="#c8f169"><rect x="6" y="17" width="2.4" height="6" rx="1"/><rect x="9.6" y="15" width="2.4" height="8" rx="1"/><rect x="13.2" y="13" width="2.4" height="10" rx="1"/><rect x="16.8" y="11" width="2.4" height="12" rx="1"/></g><rect x="20.4" y="8" width="2.4" height="15" rx="1" fill="#ff7a66"/><path d="M5 7h20" stroke="#ff7a66" stroke-width="1.5" stroke-dasharray="2 2"/></svg>
+        <span>SPF Lookup Planner<small>by Clydara</small></span>
+      </a>
+      <nav aria-label="Primary">
+        <a href="#gauge">Read the result</a>
+        <a href="#how">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a class="btn small" href="/tool.html">Open the planner</a>
+        <a class="credit" href="https://www.clydralab.com/" rel="noopener"><img src="/clydara-logo.png" alt="" width="22" height="22" /><span>Built by Clydara</span></a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <p class="eyebrow">SPF · RFC 7208 · 10 DNS lookups, no more</p>
+        <h1>Add a sender without <span>breaking SPF.</span></h1>
+        <p class="lede">For whoever looks after a domain's email DNS. See how many of SPF's ten DNS lookups your record already spends, which include costs the most, and what a new sending service will add, before you publish the change.</p>
+        <div class="cta">
+          <a class="btn" href="/tool.html">Open the planner</a>
+          <a class="btn ghost" href="/tool.html#sample">Run the sample plan</a>
+        </div>
+      </section>
+
+      <section class="instrument" aria-labelledby="sample-h">
+        <header class="inst-head">
+          <h2 id="sample-h"><span class="tag">Sample</span> example.com adds Salesforce to an existing record</h2>
+          <p>Computed by the planner from real DNS answers for each provider, captured on 16 Oct 2026.</p>
+        </header>
+        <div class="inst-meters" id="sample-meters"></div>
+        <div class="inst-bar">
+          <h3>Where the planned record's lookups go</h3>
+          <div id="sample-bar"></div>
+        </div>
+        <div class="inst-find">
+          <h3>What the planner reports</h3>
+          <div id="sample-findings"></div>
+        </div>
+        <div class="inst-tree">
+          <h3>Evaluation order, as a receiver walks it</h3>
+          <div id="sample-tree"></div>
+        </div>
+      </section>
+
+      <section class="read" id="gauge" aria-labelledby="read-h">
+        <h2 id="read-h">Reading the result</h2>
+        <div class="read-grid">
+          <article>
+            <p class="big ok">9 → 11</p>
+            <h3>The budget, before and after</h3>
+            <p>Ten cells, one per allowed lookup. At 11 a receiver stops evaluating and returns <b>permerror</b>. That is not a pass, so mail from every listed service can fail SPF and DMARC's SPF check, not just mail from the new one.</p>
+          </article>
+          <article>
+            <p class="big tight">5 of 11</p>
+            <h3>The include that costs the most</h3>
+            <p>One <code>include:mailgun.org</code> pulls in four more includes. Lookups count across the whole tree, so the bar shows each top-level entry's full cost, not just its one line.</p>
+          </article>
+          <article>
+            <p class="big over">#11</p>
+            <h3>The exact line that breaks it</h3>
+            <p>The tree numbers every lookup in evaluation order and marks the one that crosses the limit, here Salesforce's sender-dependent <code>exists</code> check.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="how" id="how" aria-labelledby="how-h">
+        <h2 id="how-h">How it works</h2>
+        <ol class="flow">
+          <li><b>Look up your domain.</b> The planner reads the live SPF record through a public DNS-over-HTTPS resolver and walks every include the way a receiving mail server does.</li>
+          <li><b>Edit the planned record.</b> Add a sending service from the list or type any include, remove one, or paste a record you are drafting. The planned side recounts as you type.</li>
+          <li><b>Compare and decide.</b> Current and planned budgets sit side by side, with void lookups, duplicate includes, loops, deprecated <code>ptr</code>, and records that end in <code>+all</code> flagged where they occur.</li>
+          <li><b>Take it with you.</b> Copy the planned record, or copy a Markdown summary of both budgets and the findings for a ticket or change request.</li>
+        </ol>
+        <p class="def"><b>What counts as a lookup?</b> <code>include</code>, <code>a</code>, <code>mx</code>, <code>ptr</code>, <code>exists</code> and <code>redirect</code> each cost one, wherever they appear in the tree. <code>ip4</code>, <code>ip6</code> and <code>all</code> cost nothing. A <em>void lookup</em> is one that finds no record; more than two is also a permerror.</p>
+      </section>
+
+      <section class="uses" aria-labelledby="uses-h">
+        <h2 id="uses-h">Where it helps</h2>
+        <table class="uses-table">
+          <thead><tr><th scope="col">Situation</th><th scope="col">What you put in</th><th scope="col">What you get</th><th scope="col">Still your decision</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Marketing wants a new email platform</th><td>Your domain plus the platform's include</td><td>The planned total and whether it crosses 10</td><td>Which existing sender to drop or move to a subdomain</td></tr>
+            <tr><th scope="row">Mail started failing SPF</th><td>Your domain</td><td>The term where evaluation stops, voids and broken includes</td><td>Which fix fits your setup</td></tr>
+            <tr><th scope="row">Cleaning up an old record</th><td>A trimmed draft</td><td>Lookups saved, and duplicate or dead includes that can go</td><td>Whether a removed service still sends for you</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="privacy" aria-labelledby="priv-h">
+        <h2 id="priv-h">Privacy and limits</h2>
+        <div class="priv-grid">
+          <div>
+            <h3>Stays in your browser</h3>
+            <p>Your draft records, the analysis and the report. Nothing is stored, logged or sent to Clydara; there is no backend.</p>
+          </div>
+          <div>
+            <h3>Goes to the DNS resolver you pick</h3>
+            <p>The domain names being looked up (yours and every included domain) go to Google Public DNS or Cloudflare 1.1.1.1 over HTTPS, the same public data any mail server reads.</p>
+          </div>
+          <div>
+            <h3>Limits</h3>
+            <p>It counts the lookup budget; it does not test a particular sending IP. Terms with macros (such as <code>%{i}</code>) are counted but cannot be expanded in advance. Provider records change, so re-check before you publish.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq" id="faq" aria-labelledby="faq-h">
+        <h2 id="faq-h">Questions</h2>
+        <details><summary>Is SPF flattening the fix when I'm over 10?</summary><p>It can be, but copying a provider's IP ranges into your record means you must notice when they change them. Often it is simpler to drop a sender you no longer use, or send bulk mail from a subdomain with its own SPF record. The planner shows the cost of each option before you choose.</p></details>
+        <details><summary>Why does my count differ from another checker?</summary><p>Checkers differ on <code>mx</code> (this one counts the mechanism as one lookup and checks the 10-host limit separately, like common open-source implementations), on whether a redirect next to <code>all</code> is counted (it is ignored, per RFC 7208), and on caching. Each term's note says how it was counted.</p></details>
+        <details><summary>Does a draft change my DNS?</summary><p>No. Nothing is published. You copy the planned record and add it at your DNS host yourself.</p></details>
+        <details><summary>Which sending services are in the list?</summary><p>Common includes such as Google Workspace, Microsoft 365, Amazon SES, SendGrid, Mailgun, Mailchimp, Postmark, Brevo, Zoho Mail, Zendesk, Salesforce, MailerLite and Marketo. Each is resolved live when you add it; confirm the value in the provider's own setup guide.</p></details>
+        <details><summary>What can I export?</summary><p>The planned record as plain text, and a Markdown summary with both budgets, the cost of each include and every finding.</p></details>
+      </section>
+
+      <section class="closing">
+        <h2>Check your record before the next sender goes live.</h2>
+        <a class="btn" href="/tool.html">Open the planner</a>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>Clydara SPF Lookup Planner. Free; no account.</span>
+      <a class="credit" href="https://www.clydralab.com/" rel="noopener"><img src="/clydara-logo.png" alt="" width="22" height="22" /><span>Built by Clydara</span></a>
+    </footer>
+    <script type="module" src="/src/landing.ts"></script>
+  </body>
+</html>
